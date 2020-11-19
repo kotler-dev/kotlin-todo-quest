@@ -69,7 +69,7 @@ fun main() {
 
                 if (unique) {
                     contacts.add(Contact(name, phone))
-                    ctx.result("Added data.").status(202)
+                    ctx.result("Added data.").status(200)
                 } else {
                     ctx.result("Please use unique name.").status(404)
                 }
@@ -83,6 +83,28 @@ fun main() {
         }
     }
 
+    app.put("/contacts/:name/:phone") { ctx ->
+        try {
+            val name = ctx.pathParam("name")
+            val phone = ctx.pathParam("phone")
+
+            if(name.trim().isNotEmpty() && phone.trim().isNotEmpty()) {
+                for (item in contacts.indices) {
+//                    val con = contacts[item]
+                    if (name == contacts[item].name) {
+                        contacts[item].phone = phone
+                        ctx.result("The phone number has been updated.").status(200)
+                    } else {
+                        ctx.result("Unknown error when updating phone entry.").status(404)
+                    }
+                }
+            } else {
+                ctx.result("Empty query.").status(404)
+            }
+        } catch (ex: Exception) {
+            ctx.result("Unknown error when replacing phone entry.").status(404)
+        }
+    }
 }
 
 /*

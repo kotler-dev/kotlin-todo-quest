@@ -8,7 +8,7 @@ class Contact(_name: String, _phone: String) {
         }
     var phone = _phone
         get() = field.capitalize()
-        private set(value) {
+        set(value) {
             field = value.trim()
         }
 }
