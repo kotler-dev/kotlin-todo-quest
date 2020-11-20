@@ -83,12 +83,12 @@ fun main() {
         }
     }
 
-    app.put("/contacts/:name/:phone") { ctx ->
+    app.patch("/contacts/:name/:phone") { ctx ->
         try {
             val name = ctx.pathParam("name")
             val phone = ctx.pathParam("phone")
 
-            if(name.trim().isNotEmpty() && phone.trim().isNotEmpty()) {
+            if (name.trim().isNotEmpty()) {
                 for (item in contacts.indices) {
 //                    val con = contacts[item]
                     if (name == contacts[item].name) {
@@ -99,10 +99,32 @@ fun main() {
                     }
                 }
             } else {
-                ctx.result("Empty query.").status(404)
+                ctx.result("Empty name.").status(404)
             }
         } catch (ex: Exception) {
             ctx.result("Unknown error when replacing phone entry.").status(404)
+        }
+    }
+
+    app.patch("/contacts/:id/:name/:phone") { ctx ->
+        try {
+            val idx = Integer.parseInt(ctx.pathParam("id"))
+            val name = ctx.pathParam("name")
+            val phone = ctx.pathParam("phone")
+            if (idx > -1 && idx < contacts.size) {
+                if (name.trim().isNotEmpty()) {
+                    contacts[idx].name = name
+                    ctx.result("Patch: Name has been changed.").status(200)
+                }
+                if (phone.trim().isNotEmpty()) {
+                    contacts[idx].phone = phone
+                    ctx.result("Patch: Phone number has been changed.").status(200)
+                }
+            } else {
+                ctx.result("Patch: ID is out boundaries.").status(404)
+            }
+        } catch (ex: Exception) {
+            ctx.result("Patch: Invalid input ID contact.").status(404)
         }
     }
 }
