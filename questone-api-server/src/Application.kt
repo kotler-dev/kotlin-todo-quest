@@ -83,6 +83,25 @@ fun main() {
         }
     }
 
+    app.put("/contacts/:id/:name/:phone") { ctx ->
+        try {
+            val idx = Integer.parseInt(ctx.pathParam("id"))
+            val name = ctx.pathParam("name")
+            val phone = ctx.pathParam("phone")
+
+            if (idx > -1 && idx < contacts.size) {
+                contacts.add(idx, Contact(name, phone))
+                contacts.removeAt(idx + 1)
+                ctx.result("Put: Added new contact.")
+            } else {
+                ctx.result("Put: Invalid ID is out boundaries.").status(404)
+            }
+
+        } catch (ex: Exception) {
+            ctx.result("Put: Invalid input ID contact.").status(404)
+        }
+    }
+
     app.patch("/contacts/:name/:phone") { ctx ->
         try {
             val name = ctx.pathParam("name")
@@ -125,6 +144,24 @@ fun main() {
             }
         } catch (ex: Exception) {
             ctx.result("Patch: Invalid input ID contact.").status(404)
+        }
+    }
+
+    app.delete("/contacts/:id") { ctx ->
+        try {
+            val idx = Integer.parseInt(ctx.pathParam("id"))
+//            val name = ctx.pathParam("name")
+//            val phone = ctx.pathParam("phone")
+
+            if (idx > -1 && idx < contacts.size) {
+                contacts.removeAt(idx)
+                ctx.result("Delete: Deleted record with id (${idx}).").status(200)
+            } else {
+                ctx.result("Delete: Index is out boundaries.").status(404)
+            }
+
+        } catch (ex: Exception) {
+            ctx.result("Delete: Unknown error when deleting record.").status(404)
         }
     }
 }
