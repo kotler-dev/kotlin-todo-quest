@@ -4,6 +4,7 @@ import io.netty.handler.codec.http.HttpHeaders.getDate
 import java.time.Instant.now
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 //{
@@ -31,6 +32,9 @@ class Task(_title: String, _isDone: Boolean) {
     val isDone = _isDone
 
     private var date = LocalDateTime.now()
-    val createdAt = date.toString()
+
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+    private val formatted = date.format(formatter)
+    val createdAt = formatted
 }
 
