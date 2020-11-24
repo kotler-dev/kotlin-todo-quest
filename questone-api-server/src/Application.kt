@@ -3,12 +3,32 @@ package dev.hyperhunt.kotlin
 //import com.eclipsesource.json.Json
 //import dev.hyperhunt.kotlin.Model.Recording
 import io.javalin.Javalin
+import java.util.*
 
 fun main() {
     val app = Javalin.create().start(7777)
+
+    val task = ArrayList<Task>()
+
+    fun initTasks() {
+        task.add(Task(UUID.randomUUID().toString(), "title1"))
+        task.add(Task(UUID.randomUUID().toString(), "title2"))
+        task.add(Task(UUID.randomUUID().toString(), "title3"))
+    }
+    initTasks()
+
+    app.get("/") { ctx ->
+        try {
+            ctx.json(task)
+        } catch (ex: Exception) {
+            ctx.result("Get: Invalid input.").status(404)
+        }
+    }
+
 //    val contact = RecordingsModel().getRecordings()
 //    val todo = Recording()
 
+    /*
     val todo = ArrayList<Recording>()
 
 //    private val todo = ArrayList<Recording>()
@@ -184,6 +204,7 @@ fun main() {
             ctx.result("Delete: Unknown error when deleting record.").status(404)
         }
     }
+    */
 }
 
 
