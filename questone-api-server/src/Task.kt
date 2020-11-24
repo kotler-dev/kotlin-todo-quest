@@ -1,5 +1,9 @@
 package dev.hyperhunt.kotlin
 
+import io.netty.handler.codec.http.HttpHeaders.getDate
+import java.time.Instant.now
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 //{
@@ -9,9 +13,10 @@ import java.util.*
 //    createdAt * string($date - time)
 //}
 
-class Task(_id: String, _title: String/*, _isDone: String, _createdAt: String*/) {
+class Task(_title: String, _isDone: Boolean) {
 
-    var id: String = _id
+    //    var id: String = _id
+    val id: String = UUID.randomUUID().toString()
 
     var title = _title
         get() = field.capitalize()
@@ -19,11 +24,13 @@ class Task(_id: String, _title: String/*, _isDone: String, _createdAt: String*/)
             field = value.trim()
         }
 
-//    var isDone = _isDone
-//        set(value) {
-//            field = value.trim()
-//        }
-//
-//    val createdAt = _createdAt
+//    fun generateUUID (): String {
+//        return UUID.randomUUID().toString()
+//    }
+
+    val isDone = _isDone
+
+    private var date = LocalDateTime.now()
+    val createdAt = date.toString()
 }
 

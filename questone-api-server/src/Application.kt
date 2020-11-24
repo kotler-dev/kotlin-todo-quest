@@ -3,17 +3,24 @@ package dev.hyperhunt.kotlin
 //import com.eclipsesource.json.Json
 //import dev.hyperhunt.kotlin.Model.Recording
 import io.javalin.Javalin
+import kotlinx.coroutines.*
 import java.util.*
 
-fun main() {
+suspend fun main() {
     val app = Javalin.create().start(7777)
 
     val task = ArrayList<Task>()
 
-    fun initTasks() {
-        task.add(Task(UUID.randomUUID().toString(), "title1"))
-        task.add(Task(UUID.randomUUID().toString(), "title2"))
-        task.add(Task(UUID.randomUUID().toString(), "title3"))
+    suspend fun initTasks() {
+//        task.add(Task(UUID.randomUUID().toString(), "title1"))
+//        task.add(Task(UUID.randomUUID().toString(), "title2"))
+//        task.add(Task(UUID.randomUUID().toString(), "title3"))
+
+        task.add(Task("title1", false))
+        delay(2000L)
+        task.add(Task("title2", false))
+        delay(2000L)
+        task.add(Task("title3", true))
     }
     initTasks()
 
