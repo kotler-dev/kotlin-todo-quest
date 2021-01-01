@@ -3,24 +3,16 @@ package dev.hyperhunt.kotlin
 //import com.eclipsesource.json.Json
 //import dev.hyperhunt.kotlin.Model.Recording
 import io.javalin.Javalin
-import kotlinx.coroutines.*
 import java.util.*
 
-suspend fun main() {
+fun main() {
     val app = Javalin.create().start(7777)
+    val task = ArrayList<DataTask>()
 
-    val task = ArrayList<Task>()
-
-    suspend fun initTasks() {
-//        task.add(Task(UUID.randomUUID().toString(), "title1"))
-//        task.add(Task(UUID.randomUUID().toString(), "title2"))
-//        task.add(Task(UUID.randomUUID().toString(), "title3"))
-
-        task.add(Task("title1", false))
-        delay(2000L)
-        task.add(Task("title2", false))
-        delay(2000L)
-        task.add(Task("title3", true))
+    fun initTasks() {
+        task.add(DataTask(title = "Read about Kotlin", isDone = true))
+        task.add(DataTask(title = "Create API server", isDone = false))
+        task.add(DataTask(title = "Create UI client", isDone = true))
     }
     initTasks()
 
@@ -31,6 +23,7 @@ suspend fun main() {
             ctx.result("Get: Invalid input.").status(404)
         }
     }
+
 
 //    val contact = RecordingsModel().getRecordings()
 //    val todo = Recording()

@@ -16,6 +16,7 @@ API: https://dector.space/todo-quest
 - Условия: if.
 - Циклы: for, for in.
 - Class.
+- Data Class.
 
 ## Server side
 - Протоколы: http, https, url.

@@ -23,8 +23,6 @@ class Task(_title: String, _isDone: Boolean) {
     val isDone = _isDone
 
     private var date = LocalDateTime.now()
-
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-    val createdAt: String? = date.format(formatter)
+    val createdAt: String? = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
 }
 
