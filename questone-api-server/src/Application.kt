@@ -1,7 +1,3 @@
-package dev.hyperhunt.kotlin
-
-//import com.eclipsesource.json.Json
-//import dev.hyperhunt.kotlin.Model.Recording
 import io.javalin.Javalin
 import java.util.*
 
@@ -40,25 +36,12 @@ fun main() {
 
     app.get("/filter/:isDone") { ctx ->
         try {
-
-            /*if (status.isNotEmpty()) {*/
-            // Print all "Done" task
             when (ctx.pathParam("isDone")) {
                 "all" -> ctx.json(task).status(200)
                 "done" -> ctx.json(task.filter { it.isDone }).status(200)
                 "undone" -> ctx.json(task.filter { !it.isDone }).status(200)
                 else -> throw Exception("Invalid filter parameter")
             }
-            /*for (item in task.indices) {
-                if (name.equals(task[item].name)) {
-                    ctx.json(task[item]).status(200)
-                } else {
-                    ctx.result("Get: The record (${name}) is missing from the database.").status(404)
-                }
-            }*/
-/*            } else {
-                ctx.result("Get: Status empty.").status(404)
-            }*/
         } catch (ex: Exception) {
             ctx.result("Get: [${ex.message}]").status(404)
         }
