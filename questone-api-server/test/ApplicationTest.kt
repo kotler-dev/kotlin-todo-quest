@@ -1,4 +1,4 @@
-package dev.hyperhunt.kotlin-todo-quest.questone
+//package dev.hyperhunt.kotlin-todo-quest.questone
 
 import io.ktor.application.*
 import io.ktor.response.*
@@ -13,7 +13,7 @@ import io.ktor.client.engine.apache.*
 import kotlin.test.*
 import io.ktor.server.testing.*
 
-class ApplicationTest {
+/*class ApplicationTest {
     @Test
     fun testRoot() {
         withTestApplication({ module(testing = true) }) {
@@ -23,4 +23,4 @@ class ApplicationTest {
             }
         }
     }
-}
+}*/
