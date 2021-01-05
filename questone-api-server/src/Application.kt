@@ -1,26 +1,22 @@
 import io.javalin.Javalin
+import io.javalin.http.Context
+import io.javalin.http.InternalServerErrorResponse
 import java.util.*
 
-fun main() {
-    val app = Javalin.create().start(7777)
-    val task = ArrayList<DataTask>()
+val task = ArrayList<DataTask>()
 
-    fun initTasks() {
-        task.add(DataTask(title = "Read about Kotlin", isDone = true))
-        task.add(DataTask(title = "Create API server", isDone = false))
-        task.add(DataTask(title = "Create UI client", isDone = true))
-    }
-    initTasks()
+fun initTasks() {
+    task.add(DataTask(title = "Read about Kotlin", isDone = true))
+    task.add(DataTask(title = "Create API server", isDone = false))
+    task.add(DataTask(title = "Create UI client", isDone = true))
+}
 
-    app.get("/") { ctx ->
-        try {
-            ctx.json(task)
-        } catch (ex: Exception) {
-            ctx.result("Get: Invalid input.").status(404)
-        }
+object TaskController {
+    fun getAllTasks(ctx: Context) {
+        ctx.json(task)
     }
 
-    app.get("/:id") { ctx ->
+    fun getIdTask(ctx: Context) {
         var idx = -1
         try {
             idx = Integer.parseInt(ctx.pathParam("id"))
@@ -34,18 +30,41 @@ fun main() {
         }
     }
 
-    app.get("/filter/:isDone") { ctx ->
+    fun getFilterTask(ctx: Context) {
         try {
             when (ctx.pathParam("isDone")) {
                 "all" -> ctx.json(task).status(200)
                 "done" -> ctx.json(task.filter { it.isDone }).status(200)
                 "undone" -> ctx.json(task.filter { !it.isDone }).status(200)
-                else -> throw Exception("Invalid filter parameter")
+                else -> throw Exception("Request parameter filter is not correct. Only one of ['all', 'done', 'undone'] are allowed.")
             }
         } catch (ex: Exception) {
-            ctx.result("Get: [${ex.message}]").status(404)
+            ctx.result("Get filter: [${ex.message}]").status(400)
         }
     }
+}
+
+fun main() {
+    val app = Javalin.create().start(7777)
+
+    initTasks()
+
+    app.exception(InternalServerErrorResponse::class.java) { e, ctr ->
+    }
+
+    app.get("/") { ctx ->
+        try {
+            ctx.result("Welcome in Todo app.")
+        } catch (ex: Exception) {
+            ctx.result("Get: Invalid input.").status(400)
+        }
+    }
+
+    app.get("/tasks", TaskController::getAllTasks)
+
+    app.get("/:id", TaskController::getIdTask)
+
+    app.get("/filter/:isDone", TaskController::getFilterTask)
 /*
 
 
