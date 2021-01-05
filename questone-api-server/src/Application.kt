@@ -30,7 +30,7 @@ object TaskController {
         }
     }
 
-    fun getFilterTask(ctx: Context) {
+    fun getTaskFilter(ctx: Context) {
         try {
             when (ctx.pathParam("isDone")) {
                 "all" -> ctx.json(task).status(200)
@@ -49,7 +49,8 @@ fun main() {
 
     initTasks()
 
-    app.exception(InternalServerErrorResponse::class.java) { e, ctr ->
+    app.exception(InternalServerErrorResponse::class.java) { e, ctx ->
+        ctx.result("500").status(500)
     }
 
     app.get("/") { ctx ->
@@ -62,9 +63,9 @@ fun main() {
 
     app.get("/tasks", TaskController::getAllTasks)
 
-    app.get("/:id", TaskController::getIdTask)
+    app.get("/tasks/:id", TaskController::getIdTask)
 
-    app.get("/filter/:isDone", TaskController::getFilterTask)
+    app.get("/filter/:isDone", TaskController::getTaskFilter)
 /*
 
 
