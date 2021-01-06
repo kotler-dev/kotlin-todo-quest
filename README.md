@@ -22,6 +22,7 @@ API: https://dector.space/todo-quest
 - Протоколы: http, https, url.
 - REST запросы: get, post, put, patch, delete.
 - JSON
+- Default responses: 200, 400, 404, 500.
 
 ## Soft
 - IDEA
