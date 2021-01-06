@@ -75,17 +75,26 @@ object TaskController {
 
     // /task/{uuid} Change task status: ['all', 'done', 'undone']
     // Mark task as done/undone
+    // path "/tasks/:uuid/:isDone"
     fun patchChangeTaskStatus(ctx: Context) {
         try {
-            val title = ctx.pathParam("uuid")
-            val unique = task.find { it.title == title } ?: 1 //NotFoundResponse()
-
-            if (title.trim().isNotEmpty() || unique == 1) {
-
-                ctx.result("Post: $unique").status(200)
-            } else {
-                ctx.result("Post: Not found title in Tasks.").status(400)
+            val uuid = ctx.pathParam("uuid")
+            var unique = true
+            task.forEach {
+                if (it.id == uuid) {
+                    unique = false
+                }
             }
+
+            val data = task.find { it.id == uuid } ?: NotFoundResponse()
+            ctx.json(data).status(200)
+
+//            if (uuid.trim().isNotEmpty() && unique) {
+//
+////                ctx.result("Post: [Id unique]").status(200)
+//            } else {
+//                ctx.result("Post: Id not unique.").status(400)
+//            }
 
 
         } catch (ex: Exception) {
@@ -130,9 +139,9 @@ fun main() {
 
     /* PATCH */
 
-    // /task/{uuid} Change task status: ['all', 'done', 'undone']
+    // /task/{uuid} Change task status: ['done', 'undone']
     // Mark task as done/undone
-    app.patch("/tasks/:uuid", TaskController::patchChangeTaskStatus)
+    app.patch("/tasks/:uuid/:isDone", TaskController::patchChangeTaskStatus)
 
 /*
 
