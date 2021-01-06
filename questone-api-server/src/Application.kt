@@ -52,18 +52,20 @@ object TaskController {
     // Create new task with specified title (Read about Ktor)
     fun postCreateTask(ctx: Context) {
         try {
-//            ctx.result(ctx.pathParam("title")).status(200)
             val title = ctx.pathParam("title")
-            val unique = task.find { it.title == title } ?: 1 //NotFoundResponse()
-
-            if (title.trim().isNotEmpty() || unique == 1) {
-
-                ctx.result("Post: $unique").status(200)
-            } else {
-                ctx.result("Post: Not found title in Tasks.").status(400)
+            var unique = true
+            task.forEach {
+                if (it.title == title) {
+                    unique = false
+                }
             }
 
-
+            if (title.trim().isNotEmpty() && unique) {
+                task.add(DataTask(title = title, isDone = false))
+                ctx.result("Post: $title [Task added]").status(200)
+            } else {
+                ctx.result("Post: Title not unique.").status(400)
+            }
         } catch (ex: Exception) {
             ctx.result("Post: ${ex.message}").status(400)
         }
