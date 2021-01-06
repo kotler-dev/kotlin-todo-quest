@@ -1,6 +1,7 @@
 import io.javalin.Javalin
 import io.javalin.http.Context
 import io.javalin.http.InternalServerErrorResponse
+import io.javalin.http.NotFoundResponse
 import java.util.*
 
 val task = ArrayList<DataTask>()
@@ -12,6 +13,9 @@ fun initTasks() {
 }
 
 object TaskController {
+
+    /* GET */
+
     fun getAllTasks(ctx: Context) {
         ctx.json(task)
     }
@@ -42,6 +46,29 @@ object TaskController {
             ctx.result("Get filter: [${ex.message}]").status(400)
         }
     }
+
+    /* POST */
+
+    // Create new task with specified title (Read about Ktor)
+    fun postCreateTask(ctx: Context) {
+        try {
+//            ctx.result(ctx.pathParam("title")).status(200)
+            val title = ctx.pathParam("title")
+            val unique = task.find { it.title == title } ?: 1 //NotFoundResponse()
+
+            if (title.trim().isNotEmpty() || unique == 1) {
+
+                ctx.result("Post: $unique").status(200)
+            } else {
+                ctx.result("Post: Not found title in Tasks.").status(400)
+            }
+
+
+        } catch (ex: Exception) {
+            ctx.result("Post: ${ex.message}").status(400)
+        }
+    }
+
 }
 
 fun main() {
@@ -61,11 +88,21 @@ fun main() {
         }
     }
 
+    /* GET */
+
     app.get("/tasks", TaskController::getAllTasks)
 
     app.get("/tasks/:id", TaskController::getIdTask)
 
-    app.get("/filter/:isDone", TaskController::getTaskFilter)
+    app.get("/tasks/filter/:isDone", TaskController::getTaskFilter)
+
+
+    /* POST */
+
+    // Create new task with specified title (Read about Ktor)
+    app.post("/tasks/:title", TaskController::postCreateTask)
+
+
 /*
 
 
