@@ -69,6 +69,28 @@ object TaskController {
         }
     }
 
+    /* PATCH */
+
+    // /task/{uuid} Change task status: ['all', 'done', 'undone']
+    // Mark task as done/undone
+    fun patchChangeTaskStatus(ctx: Context) {
+        try {
+            val title = ctx.pathParam("uuid")
+            val unique = task.find { it.title == title } ?: 1 //NotFoundResponse()
+
+            if (title.trim().isNotEmpty() || unique == 1) {
+
+                ctx.result("Post: $unique").status(200)
+            } else {
+                ctx.result("Post: Not found title in Tasks.").status(400)
+            }
+
+
+        } catch (ex: Exception) {
+            ctx.result("Patch: ${ex.message}").status(400)
+        }
+    }
+
 }
 
 fun main() {
@@ -88,6 +110,7 @@ fun main() {
         }
     }
 
+
     /* GET */
 
     app.get("/tasks", TaskController::getAllTasks)
@@ -102,6 +125,12 @@ fun main() {
     // Create new task with specified title (Read about Ktor)
     app.post("/tasks/:title", TaskController::postCreateTask)
 
+
+    /* PATCH */
+
+    // /task/{uuid} Change task status: ['all', 'done', 'undone']
+    // Mark task as done/undone
+    app.patch("/tasks/:uuid", TaskController::patchChangeTaskStatus)
 
 /*
 
