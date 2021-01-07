@@ -1,10 +1,7 @@
 import io.javalin.Javalin
 import io.javalin.http.Context
 import io.javalin.http.InternalServerErrorResponse
-import io.javalin.http.NotFoundResponse
-import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 val task = ArrayList<DataTask>()
 
