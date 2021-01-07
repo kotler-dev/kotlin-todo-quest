@@ -6,7 +6,7 @@ import java.util.*
 data class DataTask(
     var id: String = UUID.randomUUID().toString(),
     val title: String? = null,
-    val isDone: Boolean = false,
+    var isDone: Boolean = false,
     val createdAt: String? = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")),
 ) {
 

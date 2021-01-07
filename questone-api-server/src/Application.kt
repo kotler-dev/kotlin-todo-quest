@@ -3,6 +3,8 @@ import io.javalin.http.Context
 import io.javalin.http.InternalServerErrorResponse
 import io.javalin.http.NotFoundResponse
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 val task = ArrayList<DataTask>()
 
@@ -79,15 +81,16 @@ object TaskController {
     fun patchChangeTaskStatus(ctx: Context) {
         try {
             val uuid = ctx.pathParam("uuid")
-            var unique = true
+
             task.forEach {
                 if (it.id == uuid) {
-                    unique = false
+                    it.isDone = !it.isDone // Mark task as done/undone
                 }
             }
 
-            val data = task.find { it.id == uuid } ?: NotFoundResponse()
-            ctx.json(data).status(200)
+            task.find { it.id == uuid }?.let { ctx.json(it) } ?: ctx.result("Patch: Not found task for change status.").status(400)
+//            val data = task.find { it.id == uuid } ?: NotFoundResponse()
+//            ctx.json(data).status(200)
 
 //            if (uuid.trim().isNotEmpty() && unique) {
 //
@@ -141,7 +144,7 @@ fun main() {
 
     // /task/{uuid} Change task status: ['done', 'undone']
     // Mark task as done/undone
-    app.patch("/tasks/:uuid/:isDone", TaskController::patchChangeTaskStatus)
+    app.patch("/tasks/:uuid", TaskController::patchChangeTaskStatus)
 
 /*
 
